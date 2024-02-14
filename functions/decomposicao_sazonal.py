@@ -3,9 +3,9 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 
 warnings.filterwarnings("ignore")
 
-def decomposicao_sazonal(df):
+def decomposicao_sazonal(dataframe, modelo, periodo):
     
-    df_decompose = seasonal_decompose(df, model='additive', period=30)
+    df_decompose = seasonal_decompose(df=dataframe, model=modelo, period=periodo)
     
     return df_decompose
 
