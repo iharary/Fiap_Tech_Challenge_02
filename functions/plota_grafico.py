@@ -16,3 +16,8 @@ def plot_seasonal_decompose(df, column, model='additive', period=30):
 
     # Usa st.pyplot() para renderizar a figura no Streamlit
     st.pyplot(fig)
+    
+def plot_stats_forecast(model, treino, forecast):
+        
+    df = model    
+    df.plot(treino, forecast, level=[90], unique_ids=['MEATS', 'PERSONAL CARE'],engine ='matplotlib', max_insample_length=90)
