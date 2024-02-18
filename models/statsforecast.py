@@ -2,18 +2,19 @@ from statsforecast import StatsForecast
 from statsforecast.models import Naive, SeasonalNaive, SeasonalWindowAverage, AutoARIMA
 from functions.erro_medio_absoluto import wmape
 
-
 def naive_model(treino, valid, h=30):
         
     model = StatsForecast(models=[Naive()], freq='D', n_jobs=-1)
     model.fit(treino)
 
     forecast_df = model.predict(h=h, level=[90])
-    forecast_df = forecast_df.reset_index().merge(valid, on=['ds', 'unique_id'], how='left')
-
+    #forecast_df = forecast_df.reset_index().merge(valid, on=['ds', 'unique_id'], how='left')
+    forecast_df = forecast_df.reset_index().merge(valid, on=['Date'], how='left')
+    
     wmape1 = wmape(forecast_df['y'].values, forecast_df['Naive'].values)
-    print(f"WMAPE: {wmape1:.2%}")
+    #print(f"WMAPE: {wmape1:.2%}")
 
+    return wmape1
    
 def stats_forecast_model(treino, valid, h=30):
         
@@ -21,7 +22,7 @@ def stats_forecast_model(treino, valid, h=30):
     model.fit(treino)
 
     forecast_df = model.predict(h=h, level=[90])
-    forecast_df = forecast_df.reset_index().merge(valid, on=['ds', 'unique_id'], how='left')
+    #forecast_df = forecast_df.reset_index().merge(valid, on=['ds', 'unique_id'], how='left')
 
     wmape2 = wmape(forecast_df['y'].values, forecast_df['SeasonalNaive'].values)
     print(f"WMAPE: {wmape2:.2%}")
