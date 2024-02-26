@@ -1,9 +1,0 @@
-pandas
-plotly
-streamlit
-yfinance
-prophet
-numpy
-statsmodels
-matplotlib
-statsforecast
