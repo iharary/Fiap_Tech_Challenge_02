@@ -3,7 +3,6 @@ plotly
 streamlit
 yfinance
 prophet
-warnings
 numpy
 statsmodels
 matplotlib
