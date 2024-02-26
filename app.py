@@ -7,6 +7,7 @@ from functions.plota_grafico import plot_seasonal_decompose
 from models.statsforecast import naive_model, stats_forecast_model, seasonal_window_average_model, auto_arima_model
 
 
+
 st.set_page_config(
     page_title='Ibovespa - Modelo Preditivo', 
     layout='wide',
