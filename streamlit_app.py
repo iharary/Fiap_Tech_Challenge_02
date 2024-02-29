@@ -48,13 +48,14 @@ st.set_page_config(
 
 
 # Load the image
-image = Image.open('image\Ibovespa.jpeg')
+#url_imagem = 'https://github.com/iharary/Fiap_Tech_Challenge_02/tree/e45b9597da65a50277f6815300071b3832f85372/image/Ibovespa.jpeg'
+#image = Image.open('image\Ibovespa.jpeg')
 
 new_height = 200
-image = image.resize((image.size[0], new_height))
+#image = image.resize((image.size[0], new_height))
 
 # Display the image in Streamlit
-st.image(image,  use_column_width=True)
+#st.image(url_imagem,  width=new_height)
 
 #st.title('Ibovespa - Modelo Preditivo')
 st.markdown("<h1 style='text-align: center; color: blue;'>Ibovespa - Modelo Preditivo</h1>", unsafe_allow_html=True)
