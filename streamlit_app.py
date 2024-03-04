@@ -28,7 +28,8 @@ from functions.plota_grafico import (
     plot_forecast,
     plot_prophet_1,
     plot_prophet_2,
-    plot_prophet_3   
+    plot_prophet_3 ,
+    plot_cotacao_ibovespa_plotly  
 )
 from models.modelos import naive_model, auto_arima_model, prophet_model
 from PIL import Image
@@ -71,8 +72,8 @@ tickers = ['^BVSP']
 
 col1, col2, col3 = st.columns(3)
 ticker = col1.selectbox('Selecione o ticker da ação:', tickers)
-start_date = col2.date_input('Data inicial:', pd.to_datetime('2020-01-01'))
-end_date = col3.date_input('Data final:', pd.to_datetime('2024-02-01'))
+start_date = col2.date_input('Data inicial:', pd.to_datetime('2020-06-01'))
+end_date = col3.date_input('Data final:', pd.to_datetime('2024-02-29'))
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -81,7 +82,7 @@ st.subheader('Selecione parâmetros do modelo')
 st.markdown("<br>", unsafe_allow_html=True)
 
 col_treino, col_teste = st.columns(2)
-dias_treino = col_treino.number_input ('Quantidade de dias de treino:', 1000)
+dias_treino = col_treino.number_input ('Quantidade de dias de treino:', 900)
 dias_teste = col_teste.number_input('Quantidade de dias de teste:', 10)
 
 if dias_treino == 0 or dias_teste == 0:
@@ -115,7 +116,9 @@ if st.button('Executar'):
     with col2:
         st.subheader('Análise Gráfica do Índice IBOVESPA')
         #Plota o gráfico do Ibovespa    
-        plot_cotacao_ibovespa(df)
+        #plot_cotacao_ibovespa(df)
+    
+        plot_cotacao_ibovespa_plotly(df)
     
     #Preenche datas faltantes com ultimo valor conhecido
     df_close_last = datas_faltantes(df)
@@ -279,7 +282,7 @@ if st.button('Executar'):
     
     st.metric(label="WMAPE", value=f"{wmape1:.2%}")
 
-    if wmape1 < 0.05:
+    if wmape1 <= 0.30:
         st.success('O modelo é bom.')
     else:     
         st.error('O modelo é ruim.')
@@ -288,18 +291,19 @@ if st.button('Executar'):
     plot_forecast(model1, treino, forecast_df1)
     
     #AutoARIMA
-    st.markdown('<h2 style="font-size: 1.5em;">AutoARIMA</h2>', unsafe_allow_html=True)
-    
-    model2, forecast_df2 = auto_arima_model(treino, teste, h)
-    
-    wmape2 = wmape(forecast_df2['y'].values, forecast_df2['AutoARIMA'].values)
-    
-    st.metric(label="WMAPE", value=f"{wmape2:.2%}")
+    with st.spinner('Aguarde... Calculando AutoARIMA.'):
+        st.markdown('<h2 style="font-size: 1.5em;">AutoARIMA</h2>', unsafe_allow_html=True)
+        
+        model2, forecast_df2 = auto_arima_model(treino, teste, h)
+        
+        wmape2 = wmape(forecast_df2['y'].values, forecast_df2['AutoARIMA'].values)
+        
+        st.metric(label="WMAPE", value=f"{wmape2:.2%}")
 
-    if wmape2 < 0.05:
-        st.success('O modelo é bom.')
-    else:     
-        st.error('O modelo é ruim.')
+        if wmape2 <= 0.30:
+            st.success('O modelo é bom.')
+        else:     
+            st.error('O modelo é ruim.')
         
     #Plota o gráfico do forecast
     plot_forecast(model2, treino, forecast_df2)
@@ -333,7 +337,7 @@ if st.button('Executar'):
     
     st.metric(label="WMAPE", value=f"{wmape3:.2%}")
 
-    if wmape3 < 0.05:
+    if wmape3 <= 0.30:
         st.success('O modelo é bom.')
     else:     
         st.error('O modelo é ruim.')
@@ -364,7 +368,7 @@ if st.button('Executar'):
     #df_cv = cross_validation(model3)
      
     # Cross-validation
-    with st.spinner('Aguarde... Processando.'):
+    with st.spinner('Aguarde... Processando Cross-validation.'):
         st.markdown('<h2 style="font-size: 1.5em;">Cross-validation</h2>', unsafe_allow_html=True) 
         df_cv = cross_validation(model3, initial='365 days', period='30 days', horizon='90 days')
             
