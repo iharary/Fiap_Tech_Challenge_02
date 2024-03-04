@@ -1,7 +1,49 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.graph_objects as go
 
+def plot_cotacao_ibovespa_plotly(df):
+    # Criar a figura com Plotly
+    fig = go.Figure()
+
+    # Adicionar a curva de fechamento
+    fig.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name='Fechamento', line=dict(color='blue')))
+
+    # Adicionar título e labels, e habilitar o range slider
+    fig.update_layout(
+        title="Análise Gráfica do Índice IBOVESPA",
+        xaxis_title="Data",
+        yaxis_title="Valor de Fechamento",
+        xaxis=dict(rangeslider=dict(visible=True), type="date"),
+    )
+
+    # Renderizar o gráfico no Streamlit
+    st.plotly_chart(fig)
+
+def plot_cotacao_ibovespa(df):
+    
+    # Plota o ibovespa
+    # Criar figura e eixo
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    # Plotar os dados de fechamento
+    ax.plot(df.index, df['Close'], label='Fechamento', color='blue')
+
+    # Personalizar o gráfico
+    ax.set_title("Análise Gráfica do Índice IBOVESPA", fontsize=14)
+    ax.set_xlabel("Data", fontsize=12)
+    ax.set_ylabel("Valor de Fechamento", fontsize=12)
+    ax.legend()
+    plt.xticks(rotation=45) # Rotacionar as datas para melhor visualização
+
+    # Mostrar o gráfico
+    plt.tight_layout() # Ajusta automaticamente os parâmetros do subplot para dar espaço ao redor.
+    plt.show()
+
+    # Usa st.pyplot() para renderizar a figura no Streamlit
+    st.pyplot(fig)
+    
 def plot_cotacao_ibovespa(df):
     
     # Plota o ibovespa
@@ -116,7 +158,7 @@ def plot_subtracao_MV_STL(ts_log_moving_avg_diff, rolmean, rolstd):
     # Plota a média móvel com uma linha mais fina
     ax.plot(rolmean, color='red', linewidth=1, label='Rolling Mean')  # Ajuste a espessura com `linewidth`
     # Plota o desvio padrão
-    ax.plot(rolstd, color='black', label='Desvio Padrão Rolante')
+    ax.plot(rolstd, color='black', label='Desvio Padrão Móvel')
     # Adiciona uma legenda no melhor local
     ax.legend(loc='best')
     # Define o título do gráfico
